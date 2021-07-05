@@ -4,11 +4,9 @@ import com.leverx.pets.dto.request.create.CatCreateRequestDTO;
 import com.leverx.pets.dto.request.update.CatUpdateRequestDTO;
 import com.leverx.pets.dto.response.CatResponseDTO;
 import com.leverx.pets.entity.Cat;
-import com.leverx.pets.exception.EntityDoesNotExistException;
 import com.leverx.pets.mapper.CatMapper;
 import com.leverx.pets.repository.CatRepository;
 import com.leverx.pets.service.CatService;
-import com.leverx.pets.service.EntityCheckExistenceService;
 import com.leverx.pets.service.OwnerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,17 +16,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
 
 @Service
-public class CatServiceImpl implements CatService {
+public class CatServiceImpl implements CatService { // TODO: 7/5/2021 fix it
 
     private final CatRepository catRepository;
-
-    private final EntityCheckExistenceService entityCheckExistenceService;
 
     private final CatMapper catMapper;
 
@@ -48,7 +43,7 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public CatResponseDTO findById(Long id) throws EntityDoesNotExistException {
+    public CatResponseDTO findById(Long id) {
         log.trace("Method is invoked");
 
         Cat catById = findEntityById(id);
@@ -59,7 +54,7 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public Cat findEntityById(Long id) throws EntityDoesNotExistException {
+    public Cat findEntityById(Long id) {
         log.trace("Method is invoked");
 
 //        return catRepository.findById(id)
@@ -70,7 +65,7 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public CatResponseDTO create(CatCreateRequestDTO catRequestDTO) throws EntityDoesNotExistException {
+    public CatResponseDTO create(CatCreateRequestDTO catRequestDTO) {
         log.trace("Method is invoked");
 
 //        Long requestOwnerId = catRequestDTO.getOwnerId();
@@ -89,19 +84,9 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public CatResponseDTO updateById(Long id, CatUpdateRequestDTO catUpdateRequestDTO) throws EntityDoesNotExistException {
+    public CatResponseDTO updateById(Long id, CatUpdateRequestDTO catUpdateRequestDTO) {
         log.trace("Method is invoked");
 
-        if (!existsById(id)) {
-            throw new EntityDoesNotExistException(String.format("Cat with id = %d doesnt exists", id),
-                    NOT_FOUND);
-        }
-
-        Long requestOwnerId = catUpdateRequestDTO.getOwnerId();
-
-        if (requestOwnerId != null) {
-            entityCheckExistenceService.checkOwnerExistenceById(requestOwnerId);
-        }
 
         Cat catById = findEntityById(id);
 
@@ -116,15 +101,11 @@ public class CatServiceImpl implements CatService {
     public boolean existsById(Long id) {
         log.trace("Method is invoked");
 
-        boolean isCatExistsById = entityCheckExistenceService.isCatExistsById(id);
-
-        log.debug("Is cat by id = {} exists:{}", id, isCatExistsById);
-
-        return isCatExistsById;
+        return false;
     }
 
     @Override
-    public void deleteById(Long id) throws EntityDoesNotExistException {
+    public void deleteById(Long id) {
         log.trace("Method is invoked");
 
 //        try {

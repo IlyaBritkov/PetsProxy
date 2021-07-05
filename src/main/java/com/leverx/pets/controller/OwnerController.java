@@ -4,7 +4,7 @@ import com.leverx.pets.dto.request.create.OwnerCreateRequestDTO;
 import com.leverx.pets.dto.request.update.OwnerUpdateRequestDTO;
 import com.leverx.pets.dto.response.OwnerResponseDTO;
 import com.leverx.pets.entity.Owner;
-import com.leverx.pets.exception.EntityDoesNotExistException;
+import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.service.OwnerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -34,18 +33,18 @@ public class OwnerController {
     private final OwnerService ownerService;
 
     @GetMapping()
-    public ResponseEntity<Flux<Owner>> findAllOwners() {
+    public ResponseEntity<List<Owner>> findAllOwners() throws RequestException {
         log.trace("Method is invoked");
 
-        Flux<Owner> allOwners = ownerService.findAll();
+        List<Owner> allOwners = ownerService.findAll();
         return ResponseEntity.ok(allOwners);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Mono<Owner>> findOwnerById(@PathVariable("id") Long ownerId) throws EntityDoesNotExistException {
+    public ResponseEntity<Owner> findOwnerById(@PathVariable("id") Long ownerId) throws RequestException {
         log.trace("Method is invoked");
 
-        Mono<Owner> ownerResponse = ownerService.findById(ownerId);
+        Owner ownerResponse = ownerService.findById(ownerId);
         return ResponseEntity.ok(ownerResponse);
     }
 
@@ -59,7 +58,7 @@ public class OwnerController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<OwnerResponseDTO> updateOwnerById(@PathVariable("id") Long ownerId,
-                                                            @Valid @RequestBody OwnerUpdateRequestDTO updateDto) throws EntityDoesNotExistException {
+                                                            @Valid @RequestBody OwnerUpdateRequestDTO updateDto) {
         log.trace("Method is invoked");
 
         OwnerResponseDTO ownerResponseDTO = ownerService.updateById(ownerId, updateDto);
@@ -68,7 +67,7 @@ public class OwnerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOwnerById(@PathVariable("id") Long ownerId) throws EntityDoesNotExistException {
+    public ResponseEntity<?> deleteOwnerById(@PathVariable("id") Long ownerId){
         log.trace("Method is invoked");
 
         ownerService.deleteById(ownerId);

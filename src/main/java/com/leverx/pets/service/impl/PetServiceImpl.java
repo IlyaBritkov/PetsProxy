@@ -2,7 +2,6 @@ package com.leverx.pets.service.impl;
 
 import com.leverx.pets.dto.response.BasePetResponseDTO;
 import com.leverx.pets.entity.Pet;
-import com.leverx.pets.exception.EntityDoesNotExistException;
 import com.leverx.pets.mapper.PetMapper;
 import com.leverx.pets.repository.PetRepository;
 import com.leverx.pets.service.PetService;
@@ -41,7 +40,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public BasePetResponseDTO findPetById(Long petId) throws EntityDoesNotExistException {
+    public BasePetResponseDTO findPetById(Long petId) {
         log.trace("Method is invoked");
 
         Pet petById = findEntityPetById(petId);
@@ -52,7 +51,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public Pet findEntityPetById(Long petId) throws EntityDoesNotExistException {
+    public Pet findEntityPetById(Long petId) {
         log.trace("Method is invoked");
 
 //        return petRepository.findById(petId)

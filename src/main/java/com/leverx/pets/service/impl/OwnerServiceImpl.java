@@ -4,42 +4,46 @@ import com.leverx.pets.dto.request.create.OwnerCreateRequestDTO;
 import com.leverx.pets.dto.request.update.OwnerUpdateRequestDTO;
 import com.leverx.pets.dto.response.OwnerResponseDTO;
 import com.leverx.pets.entity.Owner;
-import com.leverx.pets.exception.EntityDoesNotExistException;
+import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.mapper.OwnerMapper;
 import com.leverx.pets.repository.OwnerRepository;
-import com.leverx.pets.service.EntityCheckExistenceService;
 import com.leverx.pets.service.OwnerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
 
 @Service
-public class OwnerServiceImpl implements OwnerService {
+public class OwnerServiceImpl implements OwnerService { // TODO: 7/5/2021 FIX IT
 
     private final OwnerRepository ownerRepository;
 
     private final OwnerMapper ownerMapper;
 
-    private final EntityCheckExistenceService entityCheckExistenceService;
+//    @Override
+//    public Flux<Owner> findAll() {
+//        log.trace("Method is invoked");
+//
+//        return ownerRepository.findAll();
+//    }
 
     @Override
-    public Flux<Owner> findAll() {
+    public List<Owner> findAll() throws RequestException {
         log.trace("Method is invoked");
 
         return ownerRepository.findAll();
     }
 
     @Override
-    public Mono<Owner> findById(Long id) throws EntityDoesNotExistException {
+    public Owner findById(Long id) throws RequestException {
         log.trace("Method is invoked");
 
-        Mono<Owner> ownerById = findEntityById(id);
+        Owner ownerById = findEntityById(id);
 
         log.debug("Owner by id = {} was found: {}", id, ownerById);
 
@@ -47,7 +51,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public Mono<Owner> findEntityById(Long id) throws EntityDoesNotExistException {
+    public Owner findEntityById(Long id) throws RequestException {
         log.trace("Method is invoked");
 
         return ownerRepository.findById(id);
@@ -66,7 +70,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO) throws EntityDoesNotExistException {
+    public OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO)  {
         return null;
     }
 
@@ -74,15 +78,11 @@ public class OwnerServiceImpl implements OwnerService {
     public boolean existsById(Long id) {
         log.trace("Method is invoked");
 
-        boolean isOwnerExistsById = entityCheckExistenceService.isOwnerExistsById(id);
-
-        log.debug("Is owner by id = {} exists:{}", id, isOwnerExistsById);
-
-        return isOwnerExistsById;
+        return false;
     }
 
     @Override
-    public void deleteById(Long id) throws EntityDoesNotExistException {
+    public void deleteById(Long id) {
         log.trace("Method is invoked");
 
 //        if (!existsById(id)) {

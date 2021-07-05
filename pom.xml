@@ -25,6 +25,7 @@
         <cf.logging.version>3.4.0</cf.logging.version>
         <logback-classic.version>1.2.3</logback-classic.version>
         <cf-java-logging-support-logback.version>3.3.0</cf-java-logging-support-logback.version>
+        <com.sap.cloud.sdk.version>3.47.0</com.sap.cloud.sdk.version>
     </properties>
 
     <dependencies>
@@ -112,6 +113,44 @@
             <version>${spring.cloud.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.sap.cloud.sdk/sdk-bom -->
+        <dependency>
+            <groupId>com.sap.cloud.sdk</groupId>
+            <artifactId>sdk-bom</artifactId>
+            <version>${com.sap.cloud.sdk.version}</version>
+            <type>pom</type>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.sap.cloud.sdk.cloudplatform/scp-cf -->
+        <dependency>
+            <groupId>com.sap.cloud.sdk.cloudplatform</groupId>
+            <artifactId>scp-cf</artifactId>
+            <version>${com.sap.cloud.sdk.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.sap.cds/cds-integration-cloud-sdk -->
+        <dependency>
+            <groupId>com.sap.cds</groupId>
+            <artifactId>cds-integration-cloud-sdk</artifactId>
+            <version>1.16.3</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents.core5</groupId>
+            <artifactId>httpcore5-reactive</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpasyncclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+        </dependency>
 
 
     </dependencies>
@@ -129,6 +168,23 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.sap.cloud.sdk.plugins</groupId>
+                <artifactId>usage-analytics-maven-plugin</artifactId>
+                <version>${com.sap.cloud.sdk.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>usage-analytics</goal>
+                        </goals>
+                        <configuration>
+                            <skipUsageAnalytics>false</skipUsageAnalytics>
+                            <generateSalt>true</generateSalt>
+                            <salt>f829556489c354d21221116ba430743a2bd142a05060edc05996019c58eedbf7</salt></configuration>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

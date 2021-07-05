@@ -25,7 +25,7 @@ public class Owner {
 
     private Boolean isAlive;
 
-    private List<Pet> pets = new ArrayList<>();
+    private List<Long> petIds = new ArrayList<>();
 
     @Builder
     public Owner(String firstName, String lastName, Integer age, Boolean isAlive) {

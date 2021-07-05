@@ -4,11 +4,9 @@ import com.leverx.pets.dto.request.create.DogCreateRequestDTO;
 import com.leverx.pets.dto.request.update.DogUpdateRequestDTO;
 import com.leverx.pets.dto.response.DogResponseDTO;
 import com.leverx.pets.entity.Dog;
-import com.leverx.pets.exception.EntityDoesNotExistException;
 import com.leverx.pets.mapper.DogMapper;
 import com.leverx.pets.repository.DogRepository;
 import com.leverx.pets.service.DogService;
-import com.leverx.pets.service.EntityCheckExistenceService;
 import com.leverx.pets.service.OwnerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +27,6 @@ public class DogServiceImpl implements DogService {
 
     private final DogMapper dogMapper;
 
-    private final EntityCheckExistenceService entityCheckExistenceService;
-
     private final OwnerService ownerService;
 
     @Override
@@ -47,7 +43,7 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public DogResponseDTO findById(Long id) throws EntityDoesNotExistException {
+    public DogResponseDTO findById(Long id) {
         log.trace("Method is invoked");
 
         Dog dogById = findEntityById(id);
@@ -58,7 +54,7 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public Dog findEntityById(Long id) throws EntityDoesNotExistException {
+    public Dog findEntityById(Long id) {
         log.trace("Method is invoked");
 //
 //        return dogRepository.findById(id)
@@ -67,7 +63,7 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public DogResponseDTO create(DogCreateRequestDTO dogRequestDTO) throws EntityDoesNotExistException {
+    public DogResponseDTO create(DogCreateRequestDTO dogRequestDTO) {
         log.trace("Method is invoked");
 
 //        Long requestOwnerId = dogRequestDTO.getOwnerId();
@@ -86,7 +82,7 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public DogResponseDTO updateById(Long id, DogUpdateRequestDTO dogUpdateRequestDTO) throws EntityDoesNotExistException {
+    public DogResponseDTO updateById(Long id, DogUpdateRequestDTO dogUpdateRequestDTO) {
 //        log.trace("Method is invoked");
 //
 //        if (!existsById(id)) {
@@ -115,16 +111,13 @@ public class DogServiceImpl implements DogService {
     public boolean existsById(Long id) {
         log.trace("Method is invoked");
 
-        boolean isDogExistsById = entityCheckExistenceService.isDogExistsById(id);
 
-        log.debug("Is dog by id = {} exists:{}", id, isDogExistsById);
-
-        return isDogExistsById;
+        return false;
     }
 
     @Override
 
-    public void deleteById(Long id) throws EntityDoesNotExistException {
+    public void deleteById(Long id) {
         log.trace("Method is invoked");
 
 //        try {

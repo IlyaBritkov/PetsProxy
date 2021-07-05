@@ -3,7 +3,6 @@ package com.leverx.pets.controller;
 import com.leverx.pets.dto.request.create.DogCreateRequestDTO;
 import com.leverx.pets.dto.request.update.DogUpdateRequestDTO;
 import com.leverx.pets.dto.response.DogResponseDTO;
-import com.leverx.pets.exception.EntityDoesNotExistException;
 import com.leverx.pets.service.DogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ public class DogController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DogResponseDTO> findDogById(@PathVariable("id") Long dogId) throws EntityDoesNotExistException {
+    public ResponseEntity<DogResponseDTO> findDogById(@PathVariable("id") Long dogId) {
         log.trace("Method is invoked");
 
         DogResponseDTO dogResponseDTO = dogService.findById(dogId);
@@ -48,7 +47,7 @@ public class DogController {
     }
 
     @PostMapping()
-    public ResponseEntity<DogResponseDTO> createDog(@Valid @RequestBody DogCreateRequestDTO dogCreateRequestDTO) throws EntityDoesNotExistException {
+    public ResponseEntity<DogResponseDTO> createDog(@Valid @RequestBody DogCreateRequestDTO dogCreateRequestDTO) {
         log.trace("Method is invoked");
 
         DogResponseDTO dogResponseDTO = dogService.create(dogCreateRequestDTO);
@@ -57,7 +56,7 @@ public class DogController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<DogResponseDTO> updateDogById(@PathVariable("id") Long dogId,
-                                                        @Valid @RequestBody DogUpdateRequestDTO updateDto) throws EntityDoesNotExistException {
+                                                        @Valid @RequestBody DogUpdateRequestDTO updateDto) {
         log.trace("Method is invoked");
 
         DogResponseDTO dogResponseDTO = dogService.updateById(dogId, updateDto);
@@ -66,7 +65,7 @@ public class DogController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteDogById(@PathVariable("id") Long dogId) throws EntityDoesNotExistException {
+    public ResponseEntity<?> deleteDogById(@PathVariable("id") Long dogId){
         log.trace("Method is invoked");
 
         dogService.deleteById(dogId);

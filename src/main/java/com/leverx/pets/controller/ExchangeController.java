@@ -1,8 +1,6 @@
 package com.leverx.pets.controller;
 
 import com.leverx.pets.dto.request.ExchangePetsRequestDTO;
-import com.leverx.pets.exception.EntityDoesNotExistException;
-import com.leverx.pets.exception.ExchangeException;
 import com.leverx.pets.service.ExchangeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +23,7 @@ public class ExchangeController {
     private final ExchangeService exchangeService;
 
     @PostMapping("/pets")
-    public ResponseEntity<?> exchangePets(@Valid @RequestBody ExchangePetsRequestDTO exchangePetsRequest) throws ExchangeException, EntityDoesNotExistException {
+    public ResponseEntity<?> exchangePets(@Valid @RequestBody ExchangePetsRequestDTO exchangePetsRequest) {
         log.trace("Method is invoked");
 
         exchangeService.exchangePets(exchangePetsRequest);

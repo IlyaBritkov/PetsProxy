@@ -3,7 +3,6 @@ package com.leverx.pets.mapper;
 import com.leverx.pets.dto.response.BasePetResponseDTO;
 import com.leverx.pets.entity.Owner;
 import com.leverx.pets.entity.Pet;
-import com.leverx.pets.exception.EntityDoesNotExistException;
 import com.leverx.pets.service.OwnerService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -29,7 +28,7 @@ public abstract class PetMapper {
     }
 
     @Named("getOwnerFromOwnerId")
-    protected Owner getOwnerFromOwnerId(Long ownerId) throws EntityDoesNotExistException {
+    protected Owner getOwnerFromOwnerId(Long ownerId) {
 //        return ownerService.findEntityById(ownerId);
         return null;
     }

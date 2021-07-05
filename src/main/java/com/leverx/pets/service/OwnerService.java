@@ -4,22 +4,23 @@ import com.leverx.pets.dto.request.create.OwnerCreateRequestDTO;
 import com.leverx.pets.dto.request.update.OwnerUpdateRequestDTO;
 import com.leverx.pets.dto.response.OwnerResponseDTO;
 import com.leverx.pets.entity.Owner;
-import com.leverx.pets.exception.EntityDoesNotExistException;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import com.leverx.pets.exception.RequestException;
+
+import java.util.List;
 
 public interface OwnerService {
-    Flux<Owner> findAll();
 
-    Mono<Owner> findById(Long id) throws EntityDoesNotExistException;
+    List<Owner> findAll() throws RequestException;
 
-    Mono<Owner> findEntityById(Long id) throws EntityDoesNotExistException;
+    Owner findById(Long id) throws RequestException;
+
+    Owner findEntityById(Long id) throws RequestException;
 
     OwnerResponseDTO create(OwnerCreateRequestDTO ownerRequestDTO);
 
-    OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO) throws EntityDoesNotExistException;
+    OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO);
 
     boolean existsById(Long id);
 
-    void deleteById(Long id) throws EntityDoesNotExistException;
+    void deleteById(Long id) ;
 }

@@ -18,6 +18,7 @@ public abstract class DogMapper extends PetMapper {
     @Mapping(source = "owner", target = "ownerId", qualifiedByName = "getOwnerIdFromOwner")
     public abstract DogResponseDTO toResponseDTO(Dog dog);
 
+    @Mapping(target = "id", ignore = true)
     public abstract Dog toEntity(DogCreateRequestDTO createRequest);
 
     @Mapping(source = "ownerId", target = "owner", qualifiedByName = "getOwnerFromOwnerId")

@@ -1,14 +1,15 @@
 package com.leverx.pets.repository;
 
 import com.leverx.pets.entity.Owner;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import com.leverx.pets.exception.RequestException;
+
+import java.util.List;
 
 public interface OwnerRepository {
 
-    Flux<Owner> findAll();
+    List<Owner> findAll() throws RequestException;
 
-    Mono<Owner> findById(Long id);
+    Owner findById(Long id) throws RequestException;
 
     Owner save(Owner owner);
 }

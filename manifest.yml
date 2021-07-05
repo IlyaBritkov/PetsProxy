@@ -1,0 +1,12 @@
+applications:
+  - name: my-pets-proxy
+    instances: 1
+    host: my-pets-proxy-11-04-2002
+    path: target/petsProxy-0.0.1-SNAPSHOT.jar
+    buildpack: https://github.com/cloudfoundry/java-buildpack.git
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+      SPRING_PROFILES_ACTIVE: cloud
+    services:
+      - my-pets-proxy-logs
+      - my-destination

@@ -3,7 +3,6 @@ package com.leverx.pets.controller;
 import com.leverx.pets.dto.request.create.CatCreateRequestDTO;
 import com.leverx.pets.dto.request.update.CatUpdateRequestDTO;
 import com.leverx.pets.dto.response.CatResponseDTO;
-import com.leverx.pets.exception.EntityDoesNotExistException;
 import com.leverx.pets.service.CatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ public class CatController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CatResponseDTO> findCatById(@PathVariable("id") Long catId) throws EntityDoesNotExistException {
+    public ResponseEntity<CatResponseDTO> findCatById(@PathVariable("id") Long catId) {
         log.trace("Method is invoked");
         
         CatResponseDTO catResponseDTO = catService.findById(catId);
@@ -48,7 +47,7 @@ public class CatController {
     }
 
     @PostMapping()
-    public ResponseEntity<CatResponseDTO> createCat(@Valid @RequestBody CatCreateRequestDTO catCreateRequestDTO) throws EntityDoesNotExistException {
+    public ResponseEntity<CatResponseDTO> createCat(@Valid @RequestBody CatCreateRequestDTO catCreateRequestDTO) {
         log.trace("Method is invoked");
         
         CatResponseDTO catResponseDTO = catService.create(catCreateRequestDTO);
@@ -57,7 +56,7 @@ public class CatController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<CatResponseDTO> updateCat(@PathVariable("id") Long catId,
-                                                    @Valid @RequestBody CatUpdateRequestDTO updateDto) throws EntityDoesNotExistException {
+                                                    @Valid @RequestBody CatUpdateRequestDTO updateDto) {
         log.trace("Method is invoked");
         
         CatResponseDTO catResponseDTO = catService.updateById(catId, updateDto);
@@ -66,7 +65,7 @@ public class CatController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCatById(@PathVariable("id") Long catId) throws EntityDoesNotExistException {
+    public ResponseEntity<?> deleteCatById(@PathVariable("id") Long catId) {
         log.trace("Method is invoked");
         
         catService.deleteById(catId);

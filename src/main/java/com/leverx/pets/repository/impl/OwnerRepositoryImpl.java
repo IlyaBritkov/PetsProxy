@@ -1,83 +1,66 @@
 package com.leverx.pets.repository.impl;
 
+import com.leverx.pets.config.MyDestinationProperties;
 import com.leverx.pets.entity.Owner;
+import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.repository.OwnerRepository;
+import com.leverx.pets.repository.RequestExecutor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
-import org.springframework.web.reactive.function.client.WebClient.RequestHeadersSpec;
-import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
-import org.springframework.web.reactive.function.client.WebClient.UriSpec;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
-import java.time.ZonedDateTime;
+import javax.annotation.PostConstruct;
+import java.util.List;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Slf4j
 
 @Repository
 public class OwnerRepositoryImpl implements OwnerRepository {
-    private final WebClient client;
 
-    @Override
-    public Flux<Owner> findAll() {
-//        RequestHeadersSpec<> requestHeadersSpec = client.get();
-//        UriSpec<RequestBodySpec> uriSpec = client.get();
-//
-//        RequestBodySpec bodySpec = uriSpec.uri("/resource");
+    private final MyDestinationProperties destinationProperties;
 
+    private final RequestExecutor requestExecutor;
 
-        Flux<Owner> employeeFlux = client.get()
-                .uri("/owners")
-                .retrieve()
-                .bodyToFlux(Owner.class);
+    private String OWNER_URL;
 
-        employeeFlux.subscribe(System.out::println);
+    @PostConstruct
+    public void init() {
+        OWNER_URL = destinationProperties.getDESTINATION_URI() + destinationProperties.getOWNER_RESOURCE_PATH();
+    }
 
-        return employeeFlux;
+    @SuppressWarnings("unchecked")
+    public List<Owner> findAll() throws RequestException {
+        log.info("Beginning of the method");
+
+        HttpResponse response = requestExecutor.executeRequest(new HttpGet(OWNER_URL));
+        String responseEntityString = requestExecutor.parseJsonFromHttpResponse(response);
+
+        List<Owner> ownersList = requestExecutor.readValue(responseEntityString, List.class);
+
+        log.info("Size of ownerList = {}", ownersList.size());
+        return ownersList;
     }
 
     @Override
-    public Mono<Owner> findById(Long id) {
-        Mono<Owner> ownerMono = client.get()
-                .uri("/owners/{id}", id)
-                .retrieve()
-                .bodyToMono(Owner.class);
+    public Owner findById(Long id) throws RequestException {
+        log.info("Beginning of the method");
 
-        ownerMono.subscribe(System.out::println);
+        HttpResponse httpResponse = requestExecutor.executeRequest(new HttpGet(OWNER_URL + "/" + id));
 
-        return ownerMono;
+        String responseEntityString = requestExecutor.parseJsonFromHttpResponse(httpResponse);
+
+        Owner owner = requestExecutor.readValue(responseEntityString, Owner.class);
+
+        log.info("Owner by id = {}: {}", id, owner);
+        return owner;
     }
 
     @Override
     public Owner save(Owner owner) {
-        UriSpec<RequestBodySpec> uriSpec = client.post();
-
-
-        RequestBodySpec bodySpec = uriSpec.uri("/resource");
-
-//        RequestHeadersSpec<?> headersSpec = bodySpec.bodyValue("data");
-
-        LinkedMultiValueMap map = new LinkedMultiValueMap();
-        map.add("key1", "value1");
-        map.add("key2", "value2");
-        RequestHeadersSpec<?> headersSpec = bodySpec.body(
-                BodyInserters.fromMultipartData(map));
-
-        ResponseSpec responseSpec = headersSpec.header(
-                HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON)
-                .acceptCharset(StandardCharsets.UTF_8)
-                .ifNoneMatch("*")
-                .ifModifiedSince(ZonedDateTime.now())
-                .retrieve();
         return null;
     }
 
