@@ -10,7 +10,7 @@
         <version>2.5.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    
+
     <groupId>com.leverx</groupId>
     <artifactId>petsProxy</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -26,6 +26,7 @@
         <logback-classic.version>1.2.3</logback-classic.version>
         <cf-java-logging-support-logback.version>3.3.0</cf-java-logging-support-logback.version>
         <com.sap.cloud.sdk.version>3.47.0</com.sap.cloud.sdk.version>
+        <com.sap.cds-integration-cloud-sdk.version>1.16.3</com.sap.cds-integration-cloud-sdk.version>
     </properties>
 
     <dependencies>
@@ -132,26 +133,9 @@
         <dependency>
             <groupId>com.sap.cds</groupId>
             <artifactId>cds-integration-cloud-sdk</artifactId>
-            <version>1.16.3</version>
+            <version>${com.sap.cds-integration-cloud-sdk.version}</version>
             <scope>runtime</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.httpcomponents.client5</groupId>
-            <artifactId>httpclient5</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.httpcomponents.core5</groupId>
-            <artifactId>httpcore5-reactive</artifactId>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpasyncclient -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpasyncclient</artifactId>
-        </dependency>
-
 
     </dependencies>
 
@@ -182,7 +166,8 @@
                         <configuration>
                             <skipUsageAnalytics>false</skipUsageAnalytics>
                             <generateSalt>true</generateSalt>
-                            <salt>f829556489c354d21221116ba430743a2bd142a05060edc05996019c58eedbf7</salt></configuration>
+                            <salt>f829556489c354d21221116ba430743a2bd142a05060edc05996019c58eedbf7</salt>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
