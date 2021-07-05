@@ -25,13 +25,6 @@ public class OwnerServiceImpl implements OwnerService { // TODO: 7/5/2021 FIX IT
 
     private final OwnerMapper ownerMapper;
 
-//    @Override
-//    public Flux<Owner> findAll() {
-//        log.trace("Method is invoked");
-//
-//        return ownerRepository.findAll();
-//    }
-
     @Override
     public List<Owner> findAll() throws RequestException {
         log.trace("Method is invoked");
@@ -45,8 +38,6 @@ public class OwnerServiceImpl implements OwnerService { // TODO: 7/5/2021 FIX IT
 
         Owner ownerById = findEntityById(id);
 
-        log.debug("Owner by id = {} was found: {}", id, ownerById);
-
         return ownerById;
     }
 
@@ -54,23 +45,22 @@ public class OwnerServiceImpl implements OwnerService { // TODO: 7/5/2021 FIX IT
     public Owner findEntityById(Long id) throws RequestException {
         log.trace("Method is invoked");
 
-        return ownerRepository.findById(id);
+        Owner ownerById = ownerRepository.findById(id);
+        log.debug("Owner by id = {} was found: {}", id, ownerById);
+
+        return ownerById;
     }
 
     @Override
-    public OwnerResponseDTO create(OwnerCreateRequestDTO ownerRequestDTO) {
+    public void create(OwnerCreateRequestDTO ownerRequestDTO) throws RequestException {
         log.trace("Method is invoked");
 
         Owner newOwner = ownerMapper.toEntity(ownerRequestDTO);
         ownerRepository.save(newOwner);
-
-        log.debug("New owner was created and saved: {}", newOwner);
-
-        return ownerMapper.toResponseDTO(newOwner);
     }
 
     @Override
-    public OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO)  {
+    public OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO) {
         return null;
     }
 

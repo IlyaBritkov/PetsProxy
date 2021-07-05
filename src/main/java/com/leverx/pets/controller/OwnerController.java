@@ -49,11 +49,11 @@ public class OwnerController {
     }
 
     @PostMapping()
-    public ResponseEntity<OwnerResponseDTO> createOwner(@Valid @RequestBody OwnerCreateRequestDTO ownerCreateRequestDTO) {
+    public ResponseEntity<?> createOwner(@Valid @RequestBody OwnerCreateRequestDTO ownerCreateRequestDTO) throws RequestException {
         log.trace("Method is invoked");
 
-        OwnerResponseDTO ownerResponseDTO = ownerService.create(ownerCreateRequestDTO);
-        return ResponseEntity.status(CREATED).body(ownerResponseDTO);
+        ownerService.create(ownerCreateRequestDTO);
+        return new ResponseEntity<>(CREATED);
     }
 
     @PatchMapping("/{id}")
@@ -67,7 +67,7 @@ public class OwnerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOwnerById(@PathVariable("id") Long ownerId){
+    public ResponseEntity<?> deleteOwnerById(@PathVariable("id") Long ownerId) {
         log.trace("Method is invoked");
 
         ownerService.deleteById(ownerId);

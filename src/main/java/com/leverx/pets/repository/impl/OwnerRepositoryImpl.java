@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -36,7 +37,7 @@ public class OwnerRepositoryImpl implements OwnerRepository {
     public List<Owner> findAll() throws RequestException {
         log.info("Beginning of the method");
 
-        HttpResponse response = requestExecutor.executeRequest(new HttpGet(OWNER_URL));
+        HttpResponse response = requestExecutor.executeGetRequest(new HttpGet(OWNER_URL));
         String responseEntityString = requestExecutor.parseJsonFromHttpResponse(response);
 
         List<Owner> ownersList = requestExecutor.readValue(responseEntityString, List.class);
@@ -47,9 +48,9 @@ public class OwnerRepositoryImpl implements OwnerRepository {
 
     @Override
     public Owner findById(Long id) throws RequestException {
-        log.info("Beginning of the method");
+        log.info("Method is invoked");
 
-        HttpResponse httpResponse = requestExecutor.executeRequest(new HttpGet(OWNER_URL + "/" + id));
+        HttpResponse httpResponse = requestExecutor.executeGetRequest(new HttpGet(OWNER_URL + "/" + id));
 
         String responseEntityString = requestExecutor.parseJsonFromHttpResponse(httpResponse);
 
@@ -60,8 +61,10 @@ public class OwnerRepositoryImpl implements OwnerRepository {
     }
 
     @Override
-    public Owner save(Owner owner) {
-        return null;
+    public void save(Owner newOwner) throws RequestException {
+        log.info("Method is invoked");
+
+        requestExecutor.executePostRequest(new HttpPost(OWNER_URL), newOwner);
     }
 
 

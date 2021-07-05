@@ -11,5 +11,5 @@ public interface OwnerRepository {
 
     Owner findById(Long id) throws RequestException;
 
-    Owner save(Owner owner);
+    void save(Owner owner) throws RequestException;
 }

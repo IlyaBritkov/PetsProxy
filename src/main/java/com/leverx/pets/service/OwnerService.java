@@ -16,11 +16,11 @@ public interface OwnerService {
 
     Owner findEntityById(Long id) throws RequestException;
 
-    OwnerResponseDTO create(OwnerCreateRequestDTO ownerRequestDTO);
+    void create(OwnerCreateRequestDTO ownerRequestDTO) throws RequestException;
 
     OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO);
 
     boolean existsById(Long id);
 
-    void deleteById(Long id) ;
+    void deleteById(Long id);
 }
