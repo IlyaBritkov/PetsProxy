@@ -4,6 +4,7 @@ import com.leverx.pets.dto.request.create.DogCreateRequestDTO;
 import com.leverx.pets.dto.request.update.DogUpdateRequestDTO;
 import com.leverx.pets.dto.response.DogResponseDTO;
 import com.leverx.pets.entity.Dog;
+import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.mapper.DogMapper;
 import com.leverx.pets.repository.DogRepository;
 import com.leverx.pets.service.DogService;
@@ -30,7 +31,7 @@ public class DogServiceImpl implements DogService {
     private final OwnerService ownerService;
 
     @Override
-    public List<DogResponseDTO> findAll() {
+    public List<DogResponseDTO> findAll() throws RequestException {
         log.trace("Method is invoked");
 
         List<Dog> allDogs = dogRepository.findAll();
@@ -43,7 +44,7 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public DogResponseDTO findById(Long id) {
+    public DogResponseDTO findById(Long id) throws RequestException {
         log.trace("Method is invoked");
 
         Dog dogById = findEntityById(id);
@@ -54,86 +55,55 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public Dog findEntityById(Long id) {
+    public Dog findEntityById(Long id) throws RequestException {
         log.trace("Method is invoked");
-//
-//        return dogRepository.findById(id)
-//                .orElseThrow(() -> new EntityDoesNotExistException(String.format("Dog with id = %d doesnt exists", id), NOT_FOUND));
-        return null;
+
+        return dogRepository.findById(id);
     }
 
     @Override
-    public DogResponseDTO create(DogCreateRequestDTO dogRequestDTO) {
+    public void create(DogCreateRequestDTO dogRequestDTO) throws RequestException {
         log.trace("Method is invoked");
 
-//        Long requestOwnerId = dogRequestDTO.getOwnerId();
-//        entityCheckExistenceService.checkOwnerExistenceById(requestOwnerId);
-//
-//        Owner ownerById = ownerService.findEntityById(requestOwnerId);
-//
-//        Dog newDog = dogMapper.toEntity(dogRequestDTO);
-//        newDog.setOwner(ownerById);
-//        dogRepository.save(newDog);
-//
-//        log.debug("New cat was created and saved: {}", newDog);
-
-//        return dogMapper.toResponseDTO(newDog);
-        return null;
+        Dog newDog = dogMapper.toEntity(dogRequestDTO);
+        dogRepository.save(newDog);
     }
 
     @Override
-    public DogResponseDTO updateById(Long id, DogUpdateRequestDTO dogUpdateRequestDTO) {
-//        log.trace("Method is invoked");
-//
-//        if (!existsById(id)) {
-//            throw new EntityDoesNotExistException(String.format("Dog with id = % doesnt exists", id)
-//                    , NOT_FOUND);
-//        }
-//
-//        Long requestOwnerId = dogUpdateRequestDTO.getOwnerId();
-//
-//        if (requestOwnerId != null) {
-//            entityCheckExistenceService.checkOwnerExistenceById(requestOwnerId);
-//        }
-//
-//        Dog dogById = findEntityById(id);
-//
-//        dogMapper.updateEntity(dogUpdateRequestDTO, dogById);
-//        dogRepository.save(dogById);
-//
-//        log.debug("Dog by id = {} was updated: {}", id, dogById);
-//
-//        return dogMapper.toResponseDTO(dogById);
-        return null;
+    public DogResponseDTO updateById(Long id, DogUpdateRequestDTO dogUpdateRequestDTO) throws RequestException {
+        log.trace("Method is invoked");
+
+        Dog dogById = findEntityById(id);
+
+        dogMapper.updateEntity(dogUpdateRequestDTO, dogById);
+
+        dogRepository.update(dogById);
+
+        return findById(id);
     }
 
     @Override
     public boolean existsById(Long id) {
         log.trace("Method is invoked");
 
+        boolean isExists;
+        try {
+            findById(id);
+            isExists = true;
+        } catch (RequestException e) {
+            isExists = false;
+        }
+        log.debug("Cat by id = {} exists: {}", id, isExists);
 
-        return false;
+        return isExists;
     }
 
     @Override
 
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws RequestException {
         log.trace("Method is invoked");
 
-//        try {
-//            dogRepository.deleteById(id);
-//        } catch (EmptyResultDataAccessException ex) {
-//            throw new EntityDoesNotExistException(String.format("Dog with id = %d doesnt exists", id),
-//                    NOT_FOUND);
-//        }
-
-        log.debug("Dog by id = {} was deleted", id);
-    }
-
-    @Override
-    public void delete(Dog dog) {
-        log.trace("Method is invoked");
-
-//        dogRepository.delete(dog);
+        dogRepository.deleteById(id);
+        log.debug("Cat by id = {} was deleted", id);
     }
 }
