@@ -3,7 +3,6 @@ package com.leverx.pets.controller;
 import com.leverx.pets.dto.request.create.OwnerCreateRequestDTO;
 import com.leverx.pets.dto.request.update.OwnerUpdateRequestDTO;
 import com.leverx.pets.dto.response.OwnerResponseDTO;
-import com.leverx.pets.entity.Owner;
 import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.service.OwnerService;
 import lombok.RequiredArgsConstructor;
@@ -30,21 +29,22 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 @RequestMapping(value = "api/v1/owners")
 public class OwnerController {
+
     private final OwnerService ownerService;
 
     @GetMapping()
-    public ResponseEntity<List<Owner>> findAllOwners() throws RequestException {
+    public ResponseEntity<List<OwnerResponseDTO>> findAllOwners() throws RequestException {
         log.trace("Method is invoked");
 
-        List<Owner> allOwners = ownerService.findAll();
+        List<OwnerResponseDTO> allOwners = ownerService.findAll();
         return ResponseEntity.ok(allOwners);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Owner> findOwnerById(@PathVariable("id") Long ownerId) throws RequestException {
+    public ResponseEntity<OwnerResponseDTO> findOwnerById(@PathVariable("id") Long ownerId) throws RequestException {
         log.trace("Method is invoked");
 
-        Owner ownerResponse = ownerService.findById(ownerId);
+        OwnerResponseDTO ownerResponse = ownerService.findById(ownerId);
         return ResponseEntity.ok(ownerResponse);
     }
 
@@ -58,7 +58,7 @@ public class OwnerController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<OwnerResponseDTO> updateOwnerById(@PathVariable("id") Long ownerId,
-                                                            @Valid @RequestBody OwnerUpdateRequestDTO updateDto) {
+                                                            @Valid @RequestBody OwnerUpdateRequestDTO updateDto) throws RequestException {
         log.trace("Method is invoked");
 
         OwnerResponseDTO ownerResponseDTO = ownerService.updateById(ownerId, updateDto);
@@ -67,7 +67,7 @@ public class OwnerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOwnerById(@PathVariable("id") Long ownerId) {
+    public ResponseEntity<?> deleteOwnerById(@PathVariable("id") Long ownerId) throws RequestException {
         log.trace("Method is invoked");
 
         ownerService.deleteById(ownerId);

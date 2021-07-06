@@ -28,6 +28,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 @RequestMapping("api/v1/dogs")
 public class DogController {
+
     private final DogService dogService;
 
     @GetMapping()

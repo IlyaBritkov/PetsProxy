@@ -10,17 +10,17 @@ import java.util.List;
 
 public interface OwnerService {
 
-    List<Owner> findAll() throws RequestException;
+    List<OwnerResponseDTO> findAll() throws RequestException;
 
-    Owner findById(Long id) throws RequestException;
+    OwnerResponseDTO findById(Long id) throws RequestException;
 
     Owner findEntityById(Long id) throws RequestException;
 
     void create(OwnerCreateRequestDTO ownerRequestDTO) throws RequestException;
 
-    OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO);
+    OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO) throws RequestException;
 
     boolean existsById(Long id);
 
-    void deleteById(Long id);
+    void deleteById(Long id) throws RequestException;
 }

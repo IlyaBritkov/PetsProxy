@@ -6,6 +6,7 @@ applications:
     buildpack: https://github.com/cloudfoundry/java-buildpack.git
     env:
       JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+      JBP_CONFIG_DEBUG: '{enabled: true}'
       SPRING_PROFILES_ACTIVE: cloud
     services:
       - my-pets-proxy-logs

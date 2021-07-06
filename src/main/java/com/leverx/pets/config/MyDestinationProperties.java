@@ -20,7 +20,7 @@ public class MyDestinationProperties {
 
     @Getter
     @Value("${cf.destination.api.resource.path.owners}")
-    private String OWNER_RESOURCE_PATH;
+    private String OWNERS_RESOURCE_PATH;
 
     @Getter
     @Value("${cf.destination.api.resource.path.pets}")

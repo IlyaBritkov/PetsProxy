@@ -1,6 +1,7 @@
 package com.leverx.pets.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leverx.pets.exception.RequestException;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
@@ -33,13 +38,25 @@ public class RequestExecutor {
     private final ObjectMapper objectMapper;
 
 
-    public HttpResponse executeGetRequest(HttpUriRequest request) throws RequestException {
+    public HttpResponse executeGetRequest(HttpGet request) throws RequestException {
         return executeRequest(request);
     }
 
-    public HttpResponse executePostRequest(HttpPost request, Object object) throws RequestException {
+    public HttpResponse executePostRequest(HttpPost request, Object bodyObject) throws RequestException {
+        return sendRequestWithJsonBody(request, bodyObject);
+    }
+
+    public HttpResponse executePatchRequest(HttpPatch request, Object bodyObject) throws RequestException {
+        return sendRequestWithJsonBody(request, bodyObject);
+    }
+
+    public void executeDeleteRequest(HttpDelete httpDelete) throws RequestException {
+        executeRequest(httpDelete);
+    }
+
+    protected HttpResponse sendRequestWithJsonBody(HttpEntityEnclosingRequestBase request, Object bodyObject) throws RequestException {
         try {
-            String jsonString = objectMapper.writeValueAsString(object);
+            String jsonString = objectMapper.writeValueAsString(bodyObject);
 
             request.setEntity(new StringEntity(jsonString, APPLICATION_JSON));
 
@@ -90,5 +107,15 @@ public class RequestExecutor {
             throw new RequestException("Something goes wrong. Please try again later.", BAD_GATEWAY);
         }
     }
+
+    public <T> T readValue(String content, TypeReference<T> valueType) throws RequestException {
+        try {
+            return objectMapper.readValue(content, valueType);
+        } catch (JsonProcessingException e) {
+            log.error("Exception: {}", e.getMessage());
+            throw new RequestException("Something goes wrong. Please try again later.", BAD_GATEWAY);
+        }
+    }
+
 
 }

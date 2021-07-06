@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,9 +50,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponseDTO> handleException(Exception ex) {
-        log.error("Exception was thrown: " + ex.getMessage());
+        log.error("Exception was thrown: " + ex.getMessage()
+                + "\n Stacktrace:{}", Arrays.toString(ex.getStackTrace()));
 
-        ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO("Sorry!Try again later" + ex.getMessage());
+        ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO("Sorry!Try again later. Exception: " + ex.getMessage());
 
         return new ResponseEntity<>(exceptionResponseDTO, NOT_FOUND);
     }

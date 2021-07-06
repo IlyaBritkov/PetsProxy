@@ -12,4 +12,8 @@ public interface OwnerRepository {
     Owner findById(Long id) throws RequestException;
 
     void save(Owner owner) throws RequestException;
+
+    Owner update(Owner owner) throws RequestException;
+
+    void deleteById(Long id) throws RequestException;
 }

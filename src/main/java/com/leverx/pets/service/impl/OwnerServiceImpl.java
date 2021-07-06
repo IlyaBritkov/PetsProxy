@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
 
@@ -26,19 +28,22 @@ public class OwnerServiceImpl implements OwnerService { // TODO: 7/5/2021 FIX IT
     private final OwnerMapper ownerMapper;
 
     @Override
-    public List<Owner> findAll() throws RequestException {
+    public List<OwnerResponseDTO> findAll() throws RequestException {
         log.trace("Method is invoked");
 
-        return ownerRepository.findAll();
+        return ownerRepository.findAll()
+                .stream()
+                .map(ownerMapper::toResponseDTO)
+                .collect(toList());
     }
 
     @Override
-    public Owner findById(Long id) throws RequestException {
+    public OwnerResponseDTO findById(Long id) throws RequestException {
         log.trace("Method is invoked");
 
         Owner ownerById = findEntityById(id);
 
-        return ownerById;
+        return ownerMapper.toResponseDTO(ownerById);
     }
 
     @Override
@@ -60,32 +65,39 @@ public class OwnerServiceImpl implements OwnerService { // TODO: 7/5/2021 FIX IT
     }
 
     @Override
-    public OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO) {
-        return null;
+    public OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO) throws RequestException {
+        log.trace("Method is invoked");
+
+        Owner ownerById = findEntityById(id);
+
+        ownerMapper.updateEntity(ownerUpdateRequestDTO, ownerById);
+
+        ownerRepository.update(ownerById);
+
+        return findById(id);
     }
 
     @Override
     public boolean existsById(Long id) {
         log.trace("Method is invoked");
 
-        return false;
+        boolean isExists;
+        try {
+            findById(id);
+            isExists = true;
+        } catch (RequestException e) {
+            isExists = false;
+        }
+        log.debug("Owner by id = {} exists: {}", id, isExists);
+
+        return isExists;
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws RequestException {
         log.trace("Method is invoked");
 
-//        if (!existsById(id)) {
-//            throw new EntityDoesNotExistException(String.format("Owner with id = %d doesnt exists", id), NOT_FOUND);
-//        }
-//
-//        findEntityById(id)
-//                .getPets()
-//                .stream()
-//                .filter(Objects::nonNull)
-//                .forEach(pet -> pet.setOwner(null));
-//
-//        ownerRepository.deleteById(id);
-//        log.debug("Owner by id = {} was deleted", id);
+        ownerRepository.deleteById(id);
+        log.debug("Owner by id = {} was deleted", id);
     }
 }
