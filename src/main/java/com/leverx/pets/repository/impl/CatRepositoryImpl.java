@@ -45,9 +45,8 @@ public class CatRepositoryImpl implements CatRepository {
         List<Cat> catsList = requestExecutor.readValue(responseEntityString, new TypeReference<>() {
         });
 
-        log.info("Size of catsList = {}", catsList.size() + " Cats: " + catsList); // TODO: 7/5/2021
+        log.info("Size of catsList = {}", catsList.size());
 
-        log.error(catsList.getClass().getName()); // TODO: 7/5/2021
         return catsList;
     }
 

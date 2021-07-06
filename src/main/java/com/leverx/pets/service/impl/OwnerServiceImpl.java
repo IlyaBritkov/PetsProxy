@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 
 @Service
-public class OwnerServiceImpl implements OwnerService { // TODO: 7/5/2021 FIX IT
+public class OwnerServiceImpl implements OwnerService {
 
     private final OwnerRepository ownerRepository;
 

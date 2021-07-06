@@ -45,9 +45,8 @@ public class DogRepositoryImpl implements DogRepository {
         List<Dog> dogsList = requestExecutor.readValue(responseEntityString, new TypeReference<>() {
         });
 
-        log.info("Size of dogsList = {}", dogsList.size() + " Dogs: " + dogsList); // TODO: 7/5/2021
+        log.info("Size of dogsList = {}", dogsList.size());
 
-        log.error(dogsList.getClass().getName()); // TODO: 7/5/2021
         return dogsList;
     }
 

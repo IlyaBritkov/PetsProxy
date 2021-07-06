@@ -45,9 +45,8 @@ public class OwnerRepositoryImpl implements OwnerRepository {
         List<Owner> ownersList = requestExecutor.readValue(responseEntityString, new TypeReference<>() {
         });
 
-        log.info("Size of ownerList = {}", ownersList.size() + " Owners: " + ownersList); // TODO: 7/5/2021
+        log.info("Size of ownerList = {}", ownersList.size());
 
-        log.error(ownersList.getClass().getName()); // TODO: 7/5/2021
         return ownersList;
     }
 
