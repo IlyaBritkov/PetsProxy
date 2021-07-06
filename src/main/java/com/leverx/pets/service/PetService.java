@@ -1,15 +1,12 @@
 package com.leverx.pets.service;
 
 import com.leverx.pets.dto.response.BasePetResponseDTO;
-import com.leverx.pets.entity.Pet;
+import com.leverx.pets.exception.RequestException;
 
 import java.util.List;
 
 public interface PetService {
 
-    List<BasePetResponseDTO> findAllPets();
+    List<BasePetResponseDTO> findAll() throws RequestException;
 
-    BasePetResponseDTO findPetById(Long petId) ;
-
-    Pet findEntityPetById(Long petId);
 }

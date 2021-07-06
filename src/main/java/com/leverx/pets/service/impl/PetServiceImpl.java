@@ -1,19 +1,19 @@
 package com.leverx.pets.service.impl;
 
 import com.leverx.pets.dto.response.BasePetResponseDTO;
-import com.leverx.pets.entity.Pet;
-import com.leverx.pets.mapper.PetMapper;
-import com.leverx.pets.repository.PetRepository;
+import com.leverx.pets.dto.response.CatResponseDTO;
+import com.leverx.pets.dto.response.DogResponseDTO;
+import com.leverx.pets.exception.RequestException;
+import com.leverx.pets.service.CatService;
+import com.leverx.pets.service.DogService;
 import com.leverx.pets.service.PetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
@@ -21,41 +21,21 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class PetServiceImpl implements PetService {
 
-    private final PetRepository petRepository;
+    private final DogService dogService;
 
-    @Qualifier("petMapperImpl")
-    private final PetMapper petMapper;
-
-    @Override
-    public List<BasePetResponseDTO> findAllPets() {
-        log.trace("Method is invoked");
-
-        List<Pet> allPets = petRepository.findAll();
-
-        log.debug("Amount of all pets = {}", allPets.size());
-
-        return allPets.stream()
-                .map(petMapper::toResponseDTO)
-                .collect(toList());
-    }
+    private final CatService catService;
 
     @Override
-    public BasePetResponseDTO findPetById(Long petId) {
-        log.trace("Method is invoked");
+    public List<BasePetResponseDTO> findAll() throws RequestException {
 
-        Pet petById = findEntityPetById(petId);
+        List<DogResponseDTO> allDogs = dogService.findAll();
+        List<CatResponseDTO> allCats = catService.findAll();
 
-        log.debug("Pet by id = {} was found: {}", petId, petById);
+        List<BasePetResponseDTO> allPets = new ArrayList<>();
 
-        return petMapper.toResponseDTO(petById);
-    }
+        allPets.addAll(allDogs);
+        allPets.addAll(allCats);
 
-    @Override
-    public Pet findEntityPetById(Long petId) {
-        log.trace("Method is invoked");
-
-//        return petRepository.findById(petId)
-//                .orElseThrow(() -> new EntityDoesNotExistException(String.format("Pet with id  =%d doesnt exist", petId)));
-        return null;
+        return allPets;
     }
 }
