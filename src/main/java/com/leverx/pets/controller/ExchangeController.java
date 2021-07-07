@@ -1,7 +1,6 @@
 package com.leverx.pets.controller;
 
 import com.leverx.pets.dto.request.ExchangePetsRequestDTO;
-import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.service.ExchangeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +23,7 @@ public class ExchangeController {
     private final ExchangeService exchangeService;
 
     @PostMapping("/pets")
-    public ResponseEntity<?> exchangePets(@Valid @RequestBody ExchangePetsRequestDTO exchangePetsRequest) throws RequestException {
-        log.trace("Method is invoked");
+    public ResponseEntity<?> exchangePets(@Valid @RequestBody ExchangePetsRequestDTO exchangePetsRequest) {
 
         exchangeService.exchangePets(exchangePetsRequest);
 

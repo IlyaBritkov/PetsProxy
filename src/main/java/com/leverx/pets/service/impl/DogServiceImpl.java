@@ -8,7 +8,6 @@ import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.mapper.DogMapper;
 import com.leverx.pets.repository.DogRepository;
 import com.leverx.pets.service.DogService;
-import com.leverx.pets.service.OwnerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +27,8 @@ public class DogServiceImpl implements DogService {
 
     private final DogMapper dogMapper;
 
-    private final OwnerService ownerService;
-
     @Override
-    public List<DogResponseDTO> findAll() throws RequestException {
-        log.trace("Method is invoked");
+    public List<DogResponseDTO> findAll() {
 
         List<Dog> allDogs = dogRepository.findAll();
 
@@ -44,8 +40,7 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public DogResponseDTO findById(Long id) throws RequestException {
-        log.trace("Method is invoked");
+    public DogResponseDTO findById(Long id) {
 
         Dog dogById = findEntityById(id);
 
@@ -55,23 +50,20 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public Dog findEntityById(Long id) throws RequestException {
-        log.trace("Method is invoked");
+    public Dog findEntityById(Long id) {
 
         return dogRepository.findById(id);
     }
 
     @Override
-    public void create(DogCreateRequestDTO dogRequestDTO) throws RequestException {
-        log.trace("Method is invoked");
+    public void create(DogCreateRequestDTO dogRequestDTO) {
 
         Dog newDog = dogMapper.toEntity(dogRequestDTO);
         dogRepository.save(newDog);
     }
 
     @Override
-    public DogResponseDTO updateById(Long id, DogUpdateRequestDTO dogUpdateRequestDTO) throws RequestException {
-        log.trace("Method is invoked");
+    public DogResponseDTO updateById(Long id, DogUpdateRequestDTO dogUpdateRequestDTO) {
 
         Dog dogById = findEntityById(id);
 
@@ -84,7 +76,6 @@ public class DogServiceImpl implements DogService {
 
     @Override
     public boolean existsById(Long id) {
-        log.trace("Method is invoked");
 
         boolean isExists;
         try {
@@ -100,8 +91,7 @@ public class DogServiceImpl implements DogService {
 
     @Override
 
-    public void deleteById(Long id) throws RequestException {
-        log.trace("Method is invoked");
+    public void deleteById(Long id) {
 
         dogRepository.deleteById(id);
         log.debug("Cat by id = {} was deleted", id);

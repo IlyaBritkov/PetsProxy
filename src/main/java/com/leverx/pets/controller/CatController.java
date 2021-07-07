@@ -3,7 +3,6 @@ package com.leverx.pets.controller;
 import com.leverx.pets.dto.request.create.CatCreateRequestDTO;
 import com.leverx.pets.dto.request.update.CatUpdateRequestDTO;
 import com.leverx.pets.dto.response.CatResponseDTO;
-import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.service.CatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,24 +32,21 @@ public class CatController {
     private final CatService catService;
 
     @GetMapping()
-    public ResponseEntity<List<CatResponseDTO>> findAllCats() throws RequestException {
-        log.trace("Method is invoked");
+    public ResponseEntity<List<CatResponseDTO>> findAllCats() {
 
         List<CatResponseDTO> allCats = catService.findAll();
         return ResponseEntity.ok(allCats);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CatResponseDTO> findCatById(@PathVariable("id") Long catId) throws RequestException {
-        log.trace("Method is invoked");
+    public ResponseEntity<CatResponseDTO> findCatById(@PathVariable("id") Long catId) {
 
         CatResponseDTO catResponseDTO = catService.findById(catId);
         return ResponseEntity.ok(catResponseDTO);
     }
 
     @PostMapping()
-    public ResponseEntity<?> createCat(@Valid @RequestBody CatCreateRequestDTO catCreateRequestDTO) throws RequestException {
-        log.trace("Method is invoked");
+    public ResponseEntity<?> createCat(@Valid @RequestBody CatCreateRequestDTO catCreateRequestDTO) {
 
         catService.create(catCreateRequestDTO);
         return new ResponseEntity<>(CREATED);
@@ -58,8 +54,7 @@ public class CatController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<CatResponseDTO> updateCat(@PathVariable("id") Long catId,
-                                                    @Valid @RequestBody CatUpdateRequestDTO updateDto) throws RequestException {
-        log.trace("Method is invoked");
+                                                    @Valid @RequestBody CatUpdateRequestDTO updateDto) {
 
         CatResponseDTO catResponseDTO = catService.updateById(catId, updateDto);
 
@@ -67,8 +62,7 @@ public class CatController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCatById(@PathVariable("id") Long catId) throws RequestException {
-        log.trace("Method is invoked");
+    public ResponseEntity<?> deleteCatById(@PathVariable("id") Long catId) {
 
         catService.deleteById(catId);
 

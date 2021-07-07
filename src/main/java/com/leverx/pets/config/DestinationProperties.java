@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:application.properties")
-public class MyDestinationProperties {
+public class DestinationProperties {
 
     @Getter
     @Value("${cf.destination.name}")

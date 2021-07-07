@@ -1,7 +1,6 @@
 package com.leverx.pets.service.impl;
 
 import com.leverx.pets.dto.request.ExchangePetsRequestDTO;
-import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.repository.ExchangeRepository;
 import com.leverx.pets.service.ExchangeService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +17,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     private final ExchangeRepository exchangeRepository;
 
     @Override
-    public void exchangePets(ExchangePetsRequestDTO exchangePetsRequest) throws RequestException {
-        log.trace("Method is invoked");
+    public void exchangePets(ExchangePetsRequestDTO exchangePetsRequest) {
 
         exchangeRepository.exchangePets(exchangePetsRequest);
 

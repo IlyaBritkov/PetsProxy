@@ -28,8 +28,7 @@ public class OwnerServiceImpl implements OwnerService {
     private final OwnerMapper ownerMapper;
 
     @Override
-    public List<OwnerResponseDTO> findAll() throws RequestException {
-        log.trace("Method is invoked");
+    public List<OwnerResponseDTO> findAll() {
 
         return ownerRepository.findAll()
                 .stream()
@@ -38,8 +37,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public OwnerResponseDTO findById(Long id) throws RequestException {
-        log.trace("Method is invoked");
+    public OwnerResponseDTO findById(Long id) {
 
         Owner ownerById = findEntityById(id);
 
@@ -47,8 +45,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public Owner findEntityById(Long id) throws RequestException {
-        log.trace("Method is invoked");
+    public Owner findEntityById(Long id) {
 
         Owner ownerById = ownerRepository.findById(id);
         log.debug("Owner by id = {} was found: {}", id, ownerById);
@@ -57,16 +54,14 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public void create(OwnerCreateRequestDTO ownerRequestDTO) throws RequestException {
-        log.trace("Method is invoked");
+    public void create(OwnerCreateRequestDTO ownerRequestDTO) {
 
         Owner newOwner = ownerMapper.toEntity(ownerRequestDTO);
         ownerRepository.save(newOwner);
     }
 
     @Override
-    public OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO) throws RequestException {
-        log.trace("Method is invoked");
+    public OwnerResponseDTO updateById(Long id, OwnerUpdateRequestDTO ownerUpdateRequestDTO) {
 
         Owner ownerById = findEntityById(id);
 
@@ -79,7 +74,6 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public boolean existsById(Long id) {
-        log.trace("Method is invoked");
 
         boolean isExists;
         try {
@@ -94,8 +88,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public void deleteById(Long id) throws RequestException {
-        log.trace("Method is invoked");
+    public void deleteById(Long id) {
 
         ownerRepository.deleteById(id);
         log.debug("Owner by id = {} was deleted", id);

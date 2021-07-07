@@ -1,9 +1,8 @@
 package com.leverx.pets.repository.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.leverx.pets.config.MyDestinationProperties;
+import com.leverx.pets.config.DestinationProperties;
 import com.leverx.pets.entity.Owner;
-import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.repository.OwnerRepository;
 import com.leverx.pets.repository.RequestExecutor;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ import java.util.List;
 @Repository
 public class OwnerRepositoryImpl implements OwnerRepository {
 
-    private final MyDestinationProperties destinationProperties;
+    private final DestinationProperties destinationProperties;
 
     private final RequestExecutor requestExecutor;
 
@@ -36,8 +35,7 @@ public class OwnerRepositoryImpl implements OwnerRepository {
         OWNER_URL = destinationProperties.getDESTINATION_URI() + destinationProperties.getOWNERS_RESOURCE_PATH();
     }
 
-    public List<Owner> findAll() throws RequestException {
-        log.info("Beginning of the method");
+    public List<Owner> findAll() {
 
         HttpResponse response = requestExecutor.executeGetRequest(new HttpGet(OWNER_URL));
         String responseEntityString = requestExecutor.parseJsonFromHttpResponse(response);
@@ -51,8 +49,7 @@ public class OwnerRepositoryImpl implements OwnerRepository {
     }
 
     @Override
-    public Owner findById(Long id) throws RequestException {
-        log.info("Method is invoked");
+    public Owner findById(Long id) {
 
         HttpResponse httpResponse = requestExecutor.executeGetRequest(new HttpGet(OWNER_URL + "/" + id));
 
@@ -65,18 +62,17 @@ public class OwnerRepositoryImpl implements OwnerRepository {
     }
 
     @Override
-    public void save(Owner newOwner) throws RequestException {
-        log.info("Method is invoked");
+    public void save(Owner newOwner) {
 
         requestExecutor.executePostRequest(new HttpPost(OWNER_URL), newOwner);
         log.info("Method completed");
     }
 
     @Override
-    public Owner update(Owner owner) throws RequestException {
-        log.info("Method is invoked");
+    public Owner update(Owner owner) {
 
-        HttpResponse response = requestExecutor.executePatchRequest(new HttpPatch(OWNER_URL), owner);
+        Long ownerId = owner.getId();
+        HttpResponse response = requestExecutor.executePatchRequest(new HttpPatch(OWNER_URL + "/" + ownerId), owner);
         String responseEntityString = requestExecutor.parseJsonFromHttpResponse(response);
 
         owner = requestExecutor.readValue(responseEntityString, Owner.class);
@@ -86,7 +82,7 @@ public class OwnerRepositoryImpl implements OwnerRepository {
     }
 
     @Override
-    public void deleteById(Long id) throws RequestException {
+    public void deleteById(Long id) {
         requestExecutor.executeDeleteRequest(new HttpDelete(OWNER_URL + "/" + id));
     }
 

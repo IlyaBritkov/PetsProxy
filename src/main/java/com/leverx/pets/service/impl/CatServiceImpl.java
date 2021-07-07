@@ -28,8 +28,7 @@ public class CatServiceImpl implements CatService {
     private final CatMapper catMapper;
 
     @Override
-    public List<CatResponseDTO> findAll() throws RequestException {
-        log.trace("Method is invoked");
+    public List<CatResponseDTO> findAll() {
 
         List<Cat> allCats = catRepository.findAll();
 
@@ -41,8 +40,7 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public CatResponseDTO findById(Long id) throws RequestException {
-        log.trace("Method is invoked");
+    public CatResponseDTO findById(Long id) {
 
         Cat catById = findEntityById(id);
 
@@ -52,23 +50,20 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public Cat findEntityById(Long id) throws RequestException {
-        log.trace("Method is invoked");
+    public Cat findEntityById(Long id) {
 
         return catRepository.findById(id);
     }
 
     @Override
-    public void create(CatCreateRequestDTO catRequestDTO) throws RequestException {
-        log.trace("Method is invoked");
+    public void create(CatCreateRequestDTO catRequestDTO) {
 
         Cat newCat = catMapper.toEntity(catRequestDTO);
         catRepository.save(newCat);
     }
 
     @Override
-    public CatResponseDTO updateById(Long id, CatUpdateRequestDTO catUpdateRequestDTO) throws RequestException {
-        log.trace("Method is invoked");
+    public CatResponseDTO updateById(Long id, CatUpdateRequestDTO catUpdateRequestDTO) {
 
         Cat catById = findEntityById(id);
 
@@ -81,7 +76,6 @@ public class CatServiceImpl implements CatService {
 
     @Override
     public boolean existsById(Long id) {
-        log.trace("Method is invoked");
 
         boolean isExists;
         try {
@@ -96,8 +90,7 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public void deleteById(Long id) throws RequestException {
-        log.trace("Method is invoked");
+    public void deleteById(Long id) {
 
         catRepository.deleteById(id);
         log.debug("Cat by id = {} was deleted", id);

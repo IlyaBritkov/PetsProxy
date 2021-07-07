@@ -1,9 +1,8 @@
 package com.leverx.pets.repository.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.leverx.pets.config.MyDestinationProperties;
+import com.leverx.pets.config.DestinationProperties;
 import com.leverx.pets.entity.Dog;
-import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.repository.DogRepository;
 import com.leverx.pets.repository.RequestExecutor;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ import java.util.List;
 @Repository
 public class DogRepositoryImpl implements DogRepository {
 
-    private final MyDestinationProperties destinationProperties;
+    private final DestinationProperties destinationProperties;
 
     private final RequestExecutor requestExecutor;
 
@@ -36,8 +35,7 @@ public class DogRepositoryImpl implements DogRepository {
         DOGS_URL = destinationProperties.getDESTINATION_URI() + destinationProperties.getDOGS_RESOURCE_PATH();
     }
 
-    public List<Dog> findAll() throws RequestException {
-        log.info("Beginning of the method");
+    public List<Dog> findAll() {
 
         HttpResponse response = requestExecutor.executeGetRequest(new HttpGet(DOGS_URL));
         String responseEntityString = requestExecutor.parseJsonFromHttpResponse(response);
@@ -51,8 +49,7 @@ public class DogRepositoryImpl implements DogRepository {
     }
 
     @Override
-    public Dog findById(Long id) throws RequestException {
-        log.info("Method is invoked");
+    public Dog findById(Long id) {
 
         HttpResponse httpResponse = requestExecutor.executeGetRequest(new HttpGet(DOGS_URL + "/" + id));
 
@@ -65,18 +62,15 @@ public class DogRepositoryImpl implements DogRepository {
     }
 
     @Override
-    public void save(Dog newDog) throws RequestException {
-        log.info("Method is invoked");
-
+    public void save(Dog newDog) {
         requestExecutor.executePostRequest(new HttpPost(DOGS_URL), newDog);
-        log.info("Method completed");
     }
 
     @Override
-    public Dog update(Dog dog) throws RequestException {
-        log.info("Method is invoked");
+    public Dog update(Dog dog) {
 
-        HttpResponse response = requestExecutor.executePatchRequest(new HttpPatch(DOGS_URL), dog);
+        Long dogId = dog.getId();
+        HttpResponse response = requestExecutor.executePatchRequest(new HttpPatch(DOGS_URL + "/" + dogId), dog);
         String responseEntityString = requestExecutor.parseJsonFromHttpResponse(response);
 
         dog = requestExecutor.readValue(responseEntityString, Dog.class);
@@ -86,7 +80,7 @@ public class DogRepositoryImpl implements DogRepository {
     }
 
     @Override
-    public void deleteById(Long id) throws RequestException {
+    public void deleteById(Long id) {
         requestExecutor.executeDeleteRequest(new HttpDelete(DOGS_URL + "/" + id));
     }
 }

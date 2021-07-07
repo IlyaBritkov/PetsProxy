@@ -1,9 +1,8 @@
 package com.leverx.pets.repository.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.leverx.pets.config.MyDestinationProperties;
+import com.leverx.pets.config.DestinationProperties;
 import com.leverx.pets.entity.Cat;
-import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.repository.CatRepository;
 import com.leverx.pets.repository.RequestExecutor;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ import java.util.List;
 @Repository
 public class CatRepositoryImpl implements CatRepository {
 
-    private final MyDestinationProperties destinationProperties;
+    private final DestinationProperties destinationProperties;
 
     private final RequestExecutor requestExecutor;
 
@@ -36,8 +35,7 @@ public class CatRepositoryImpl implements CatRepository {
         CATS_URL = destinationProperties.getDESTINATION_URI() + destinationProperties.getCATS_RESOURCE_PATH();
     }
 
-    public List<Cat> findAll() throws RequestException {
-        log.info("Beginning of the method");
+    public List<Cat> findAll() {
 
         HttpResponse response = requestExecutor.executeGetRequest(new HttpGet(CATS_URL));
         String responseEntityString = requestExecutor.parseJsonFromHttpResponse(response);
@@ -51,8 +49,7 @@ public class CatRepositoryImpl implements CatRepository {
     }
 
     @Override
-    public Cat findById(Long id) throws RequestException {
-        log.info("Method is invoked");
+    public Cat findById(Long id) {
 
         HttpResponse httpResponse = requestExecutor.executeGetRequest(new HttpGet(CATS_URL + "/" + id));
 
@@ -65,18 +62,15 @@ public class CatRepositoryImpl implements CatRepository {
     }
 
     @Override
-    public void save(Cat newCat) throws RequestException {
-        log.info("Method is invoked");
-
+    public void save(Cat newCat) {
         requestExecutor.executePostRequest(new HttpPost(CATS_URL), newCat);
-        log.info("Method completed");
     }
 
     @Override
-    public Cat update(Cat cat) throws RequestException {
-        log.info("Method is invoked");
+    public Cat update(Cat cat) {
 
-        HttpResponse response = requestExecutor.executePatchRequest(new HttpPatch(CATS_URL), cat);
+        Long catId = cat.getId();
+        HttpResponse response = requestExecutor.executePatchRequest(new HttpPatch(CATS_URL + "/" + catId), cat);
         String responseEntityString = requestExecutor.parseJsonFromHttpResponse(response);
 
         cat = requestExecutor.readValue(responseEntityString, Cat.class);
@@ -86,7 +80,7 @@ public class CatRepositoryImpl implements CatRepository {
     }
 
     @Override
-    public void deleteById(Long id) throws RequestException {
+    public void deleteById(Long id) {
         requestExecutor.executeDeleteRequest(new HttpDelete(CATS_URL + "/" + id));
     }
 }

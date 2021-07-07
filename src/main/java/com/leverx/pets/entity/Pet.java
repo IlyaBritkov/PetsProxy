@@ -26,6 +26,6 @@ public class Pet {
 
     private Boolean isHealthy;
 
-    private Owner owner;
+    private Long ownerId;
 
 }

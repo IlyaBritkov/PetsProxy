@@ -2,6 +2,7 @@ package com.leverx.pets.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leverx.pets.exception.RequestException;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
@@ -38,23 +38,23 @@ public class RequestExecutor {
     private final ObjectMapper objectMapper;
 
 
-    public HttpResponse executeGetRequest(HttpGet request) throws RequestException {
+    public HttpResponse executeGetRequest(HttpGet request) {
         return executeRequest(request);
     }
 
-    public HttpResponse executePostRequest(HttpPost request, Object bodyObject) throws RequestException {
+    public HttpResponse executePostRequest(HttpPost request, Object bodyObject) {
         return sendRequestWithJsonBody(request, bodyObject);
     }
 
-    public HttpResponse executePatchRequest(HttpPatch request, Object bodyObject) throws RequestException {
+    public HttpResponse executePatchRequest(HttpEntityEnclosingRequestBase request, Object bodyObject) {
         return sendRequestWithJsonBody(request, bodyObject);
     }
 
-    public void executeDeleteRequest(HttpDelete httpDelete) throws RequestException {
+    public void executeDeleteRequest(HttpDelete httpDelete) {
         executeRequest(httpDelete);
     }
 
-    protected HttpResponse sendRequestWithJsonBody(HttpEntityEnclosingRequestBase request, Object bodyObject) throws RequestException {
+    protected HttpResponse sendRequestWithJsonBody(HttpEntityEnclosingRequestBase request, Object bodyObject) {
         try {
             String jsonString = objectMapper.writeValueAsString(bodyObject);
 
@@ -67,7 +67,7 @@ public class RequestExecutor {
         }
     }
 
-    protected HttpResponse executeRequest(HttpUriRequest request) throws RequestException {
+    protected HttpResponse executeRequest(HttpUriRequest request) {
         try {
             HttpResponse httpResponse = httpClient.execute(request);
 
@@ -75,7 +75,15 @@ public class RequestExecutor {
             int statusCode = responseStatusLine.getStatusCode();
 
             if (statusCode < 200 || statusCode >= 300) {
-                throw new RequestException(responseStatusLine.getReasonPhrase(), HttpStatus.valueOf(statusCode));
+                String jsonExceptionMsg = parseJsonFromResponseEntity(httpResponse.getEntity());
+
+                JsonNode jsonNode = objectMapper.readTree(jsonExceptionMsg);
+
+                String exceptionMsg = jsonNode.get("message").asText();
+
+                exceptionMsg = exceptionMsg != null ? exceptionMsg : responseStatusLine.getReasonPhrase();
+
+                throw new RequestException(exceptionMsg, HttpStatus.valueOf(statusCode));
             }
 
             return httpResponse;
@@ -85,12 +93,12 @@ public class RequestExecutor {
         }
     }
 
-    public String parseJsonFromHttpResponse(HttpResponse httpResponse) throws RequestException {
+    public String parseJsonFromHttpResponse(HttpResponse httpResponse) {
         HttpEntity entity = httpResponse.getEntity();
         return parseJsonFromResponseEntity(entity);
     }
 
-    public String parseJsonFromResponseEntity(HttpEntity responseEntity) throws RequestException {
+    public String parseJsonFromResponseEntity(HttpEntity responseEntity) {
         try {
             return EntityUtils.toString(responseEntity);
         } catch (IOException e) {
@@ -99,7 +107,7 @@ public class RequestExecutor {
         }
     }
 
-    public <T> T readValue(String content, Class<T> valueType) throws RequestException {
+    public <T> T readValue(String content, Class<T> valueType) {
         try {
             return objectMapper.readValue(content, valueType);
         } catch (JsonProcessingException e) {
@@ -108,7 +116,7 @@ public class RequestExecutor {
         }
     }
 
-    public <T> T readValue(String content, TypeReference<T> valueType) throws RequestException {
+    public <T> T readValue(String content, TypeReference<T> valueType) {
         try {
             return objectMapper.readValue(content, valueType);
         } catch (JsonProcessingException e) {

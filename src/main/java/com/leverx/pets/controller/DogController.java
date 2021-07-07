@@ -3,7 +3,6 @@ package com.leverx.pets.controller;
 import com.leverx.pets.dto.request.create.DogCreateRequestDTO;
 import com.leverx.pets.dto.request.update.DogUpdateRequestDTO;
 import com.leverx.pets.dto.response.DogResponseDTO;
-import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.service.DogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,7 @@ public class DogController {
     private final DogService dogService;
 
     @GetMapping()
-    public ResponseEntity<List<DogResponseDTO>> findAllDogs() throws RequestException {
+    public ResponseEntity<List<DogResponseDTO>> findAllDogs() {
         log.trace("Method is invoked");
 
         List<DogResponseDTO> allDogs = dogService.findAll();
@@ -41,7 +40,7 @@ public class DogController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DogResponseDTO> findDogById(@PathVariable("id") Long dogId) throws RequestException {
+    public ResponseEntity<DogResponseDTO> findDogById(@PathVariable("id") Long dogId) {
         log.trace("Method is invoked");
 
         DogResponseDTO dogResponseDTO = dogService.findById(dogId);
@@ -49,8 +48,7 @@ public class DogController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> createDog(@Valid @RequestBody DogCreateRequestDTO dogCreateRequestDTO) throws RequestException {
-        log.trace("Method is invoked");
+    public ResponseEntity<?> createDog(@Valid @RequestBody DogCreateRequestDTO dogCreateRequestDTO) {
 
         dogService.create(dogCreateRequestDTO);
         return new ResponseEntity<>(CREATED);
@@ -58,8 +56,7 @@ public class DogController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<DogResponseDTO> updateDogById(@PathVariable("id") Long dogId,
-                                                        @Valid @RequestBody DogUpdateRequestDTO updateDto) throws RequestException {
-        log.trace("Method is invoked");
+                                                        @Valid @RequestBody DogUpdateRequestDTO updateDto) {
 
         DogResponseDTO dogResponseDTO = dogService.updateById(dogId, updateDto);
 
@@ -67,8 +64,7 @@ public class DogController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteDogById(@PathVariable("id") Long dogId) throws RequestException {
-        log.trace("Method is invoked");
+    public ResponseEntity<?> deleteDogById(@PathVariable("id") Long dogId) {
 
         dogService.deleteById(dogId);
 

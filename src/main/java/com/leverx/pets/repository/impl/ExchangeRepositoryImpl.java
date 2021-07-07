@@ -1,8 +1,7 @@
 package com.leverx.pets.repository.impl;
 
-import com.leverx.pets.config.MyDestinationProperties;
+import com.leverx.pets.config.DestinationProperties;
 import com.leverx.pets.dto.request.ExchangePetsRequestDTO;
-import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.repository.ExchangeRepository;
 import com.leverx.pets.repository.RequestExecutor;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import javax.annotation.PostConstruct;
 @Repository
 public class ExchangeRepositoryImpl implements ExchangeRepository {
 
-    private final MyDestinationProperties destinationProperties;
+    private final DestinationProperties destinationProperties;
 
     private final RequestExecutor requestExecutor;
 
@@ -31,7 +30,7 @@ public class ExchangeRepositoryImpl implements ExchangeRepository {
     }
 
     @Override
-    public void exchangePets(ExchangePetsRequestDTO exchangePetsRequestDTO) throws RequestException {
+    public void exchangePets(ExchangePetsRequestDTO exchangePetsRequestDTO) {
         requestExecutor.executePostRequest(new HttpPost(EXCHANGE_URL), exchangePetsRequestDTO);
     }
 }

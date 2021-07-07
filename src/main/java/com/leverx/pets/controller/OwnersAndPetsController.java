@@ -2,7 +2,6 @@ package com.leverx.pets.controller;
 
 import com.leverx.pets.dto.response.BasePetResponseDTO;
 import com.leverx.pets.dto.response.OwnerResponseDTO;
-import com.leverx.pets.exception.RequestException;
 import com.leverx.pets.service.OwnerService;
 import com.leverx.pets.service.PetService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.List;
 @Slf4j
 
 @RestController
-@RequestMapping(value = "api/v1/all")
+@RequestMapping(value = "api/v1")
 public class OwnersAndPetsController {
 
     private final OwnerService ownerService;
@@ -28,16 +27,15 @@ public class OwnersAndPetsController {
     private final PetService petService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Object>> findAllCats() throws RequestException {
-        log.trace("Method is invoked");
+    public ResponseEntity<List<List<?>>> findAll() {
 
         List<OwnerResponseDTO> allOwners = ownerService.findAll();
         List<BasePetResponseDTO> allPets = petService.findAll();
 
-        List<Object> all = new ArrayList<>();
+        List<List<?>> all = new ArrayList<>();
 
-        all.addAll(allOwners);
-        all.addAll(allPets);
+        all.add(allOwners);
+        all.add(allPets);
 
         return ResponseEntity.ok(all);
     }

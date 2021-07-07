@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 
 @Configuration
-public class SpringConfig {
+public class DestinationConfig {
 
-    private final MyDestinationProperties destinationProperties;
+    private final DestinationProperties destinationProperties;
 
     @Bean
     public HttpDestination httpDestination() {

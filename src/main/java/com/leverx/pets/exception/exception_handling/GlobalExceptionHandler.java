@@ -1,4 +1,4 @@
-package com.leverx.pets.exception_handling;
+package com.leverx.pets.exception.exception_handling;
 
 import com.leverx.pets.dto.response.ExceptionResponseDTO;
 import com.leverx.pets.exception.RestException;
